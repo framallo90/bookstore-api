@@ -1,29 +1,27 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { BooksModule } from './books/books.module';
-import { Book } from './books/book.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
 
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: 'mysql',
-        host: config.get<string>('DB_HOST'),
-        port: Number(config.get<string>('DB_PORT')),
-        username: config.get<string>('DB_USER'),
-        password: config.get<string>('DB_PASSWORD'),
-        database: config.get<string>('DB_NAME'),
-        entities: [Book],
-        synchronize: true,
+        host: '127.0.0.1', // porque Nest corre en tu PC
+        port: Number(config.get('MYSQL_PORT')), // 3307
+        username: config.get('MYSQL_USER'),      // bookstore
+        password: config.get('MYSQL_PASSWORD'),  // bookstore
+        database: config.get('MYSQL_DATABASE'),  // bookstore
+        autoLoadEntities: true,
+        synchronize: true, // dev only
       }),
     }),
-
-    BooksModule,
   ],
 })
 export class AppModule {}
