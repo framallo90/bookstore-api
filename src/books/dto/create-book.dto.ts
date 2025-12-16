@@ -1,19 +1,20 @@
-import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateBookDto {
+  @ApiProperty({ example: 'Clean Code' })
   @IsString()
-  @IsNotEmpty()
   title: string;
 
+  @ApiProperty({ example: 'Robert C. Martin' })
   @IsString()
-  @IsNotEmpty()
   author: string;
 
+  @ApiProperty({ example: '9780132350884' })
   @IsString()
-  @IsNotEmpty()
   isbn: string;
 
+  @ApiProperty({ example: 29.99 })
   @IsNumber()
-  @Min(0)
   price: number;
 }
