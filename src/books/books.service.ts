@@ -16,11 +16,13 @@ export class BooksService {
     return this.booksRepo.find();
   }
 
-  async findOne(id: number) {
-    const book = await this.booksRepo.findOne({ where: { id } });
-    if (!book) throw new NotFoundException(`Book with id ${id} not found`);
-    return book;
+ async findOne(id: number) {
+  const book = await this.booksRepo.findOne({ where: { id } });
+  if (!book) {
+    throw new NotFoundException(`Book with id ${id} not found`);
   }
+  return book;
+}
 
   create(dto: CreateBookDto) {
     const book = this.booksRepo.create(dto);
@@ -38,4 +40,6 @@ export class BooksService {
     await this.booksRepo.remove(book);
     return { deleted: true, id };
   }
+
+  
 }
