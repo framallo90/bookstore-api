@@ -29,17 +29,24 @@ export class BooksService {
     return this.booksRepo.save(book);
   }
 
-  async update(id: number, dto: UpdateBookDto) {
-    const book = await this.findOne(id);
-    Object.assign(book, dto);
-    return this.booksRepo.save(book);
+async update(id: number, dto: any) {
+  const book = await this.booksRepo.findOne({ where: { id } });
+  if (!book) {
+    throw new NotFoundException(`Book with id ${id} not found`);
   }
+  Object.assign(book, dto);
+  return this.booksRepo.save(book);
+}
 
-  async remove(id: number) {
-    const book = await this.findOne(id);
-    await this.booksRepo.remove(book);
-    return { deleted: true, id };
+ async remove(id: number) {
+  const result = await this.booksRepo.delete(id);
+  if (result.affected === 0) {
+    throw new NotFoundException(`Book with id ${id} not found`);
   }
+  return { message: `Book ${id} deleted` };
+}
+
+  
 
   
 }

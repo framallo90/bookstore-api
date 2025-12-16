@@ -23,12 +23,12 @@ export class BooksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateBookDto) {
-    return this.booksService.update(Number(id), dto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateBookDto,) {
+      return this.booksService.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(Number(id));
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.booksService.remove(id);
   }
 }
